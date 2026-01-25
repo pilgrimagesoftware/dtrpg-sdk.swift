@@ -1,0 +1,216 @@
+openapi: 3.0.0
+info:
+  title: DriveThruRPG
+  version: 1.0.0
+  description: ''
+servers:
+  - url: https://api.drivethrurpg.com/api
+paths:
+  /{DTRPG_API_VERSION}/auth_key:
+    post:
+      summary: Get token
+      responses:
+        '200':
+          description: Success
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Wed, 21 Jan 2026 00:27:13 GMT
+            Transfer-Encoding:
+              schema:
+                type: string
+              example: chunked
+            Connection:
+              schema:
+                type: string
+              example: keep-alive
+            Server:
+              schema:
+                type: string
+              example: nginx
+            Cache-Control:
+              schema:
+                type: string
+              example: no-cache, private
+            X-Clacks-Overhead:
+              schema:
+                type: string
+              example: GNU Rob Wieland
+            Set-Cookie:
+              schema:
+                type: string
+              example: >-
+                refreshToken=4496d1c728d6b238161013719b8f4ba18cd770ed2f2c8323e9d8b2749455fd2358f0a30ab71377eec464a135bc8e03ecaa0debc0e3a80d4116e85810f7c55d04;
+                expires=Fri, 20 Feb 2026 00:27:13 GMT; Max-Age=2592000;
+                path=/api/vBeta/auth/refresh; domain=.drivethrurpg.com; secure;
+                httponly; samesite=strict
+            Strict-Transport-Security:
+              schema:
+                type: string
+              example: max-age=15768000
+            Content-Encoding:
+              schema:
+                type: string
+              example: br
+            X-Varnish:
+              schema:
+                type: integer
+              example: '238007'
+            Age:
+              schema:
+                type: integer
+              example: '0'
+            Via:
+              schema:
+                type: string
+              example: 1.1 varnish (Varnish/5.2)
+            X-Cache:
+              schema:
+                type: string
+              example: uncached
+            Vary:
+              schema:
+                type: string
+              example: Accept-Encoding, cookie, authorization
+            Accept-Ranges:
+              schema:
+                type: string
+              example: bytes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  refreshToken:
+                    type: string
+                  refreshTokenTTL:
+                    type: integer
+              example:
+                token: >-
+                  eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3Njg5NTUyMzMsImV4cCI6MTc2ODk3NjgzMywicm9sZXMiOlsiUk9MRV9QUk9YWSIsIlJPTEVfTElCUkFSSUFOIl0sImVtYWlsIjoicGF1bEBzY2hpZmZlcmVycy5uZXQiLCJwcmV2aW91c0xvZ2luIjp7ImRhdGUiOiIyMDI2LTAxLTE5IDIwOjExOjQ3LjAwMDAwMCIsInRpbWV6b25lX3R5cGUiOjMsInRpbWV6b25lIjoiVVMvQ2VudHJhbCJ9LCJ1c2VybmFtZSI6InBhdWxAc2NoaWZmZXJlcnMubmV0Iiwic2l0ZUlkIjoxMCwiZ3JvdXBJZCI6MSwibmFtZSI6IkRyaXZlVGhydVJQRy5jb20iLCJsb2dpbklwIjoiOTguOTcuNDEuMTQ0IiwiZG9tYWluIjoiYXBpLmRyaXZldGhydXJwZy5jb20iLCJsb2dpbk9yaWdpbiI6MjUsInJvbGVfbGlicmFyaWFuIjoxLCJyb2xlX2Rpc3RyaWJ1dG9yIjowLCJyb2xlX2dsb2JhbF9kaXN0cmlidXRvciI6MCwiY3VycmVudElwIjoiOTguOTcuNDEuMTQ0IiwiY3VzdG9tZXJJZCI6Mzk5MTQ0LCJjdXN0b21lckZpcnN0TmFtZSI6IlBhdWwiLCJjdXN0b21lckxhc3ROYW1lIjoiU2NoaWZmZXJlciIsInB1Ymxpc2hlcklkIjoxMjkxNiwiaW5pdGlhbEFkdWx0Q29udGVudE9wdEluIjpmYWxzZSwiaW5pdGlhbEFpR2VuQ29udGVudEVuYWJsZWQiOnRydWUsImluaXRpYWxEZWZhdWx0Q3VycmVuY3kiOiJVU0QiLCJpbml0aWFsRGVmYXVsdExhbmd1YWdlSWQiOjEsImlzR3Vlc3QiOmZhbHNlLCJiYXNrZXRVVUlEIjoiMzk3NTUyNDctYTU5MS00OTFmLTgyOTktNGNlNGJmZTE4YzM0In0.liWGMSyhTKAlWKmFAIIf-xDZkN5yPHHaP6epkwNxZoM9si9x5XgxGuTbUNPl3K-OfCtxUrqCMUVt7CWgA2iWcxj_rEIdtbwlVUZQ4Da8Q0unxnz6ogwBTlIB1x64Qye-qDxJYUrw8F3Gj9gm8utg0h04-KtSCCGb8yLqLQSePSmS47Fvah3FKLPuH8ufbgYP5fttLW3Nz44cjkPPsLBKf1nVXplVC6GGnEw2h6jAaS_tikcFo816krlm_rDijRKBHfdyC3I8BJgqu5CyJ_xFvcArNg-Sajl7s7ilUuv6lSvAHEPpodZsSCERJXberqJvvY4Wyiil5OBLgfcfWRCoVQ
+                refreshToken: >-
+                  4496d1c728d6b238161013719b8f4ba18cd770ed2f2c8323e9d8b2749455fd2358f0a30ab71377eec464a135bc8e03ecaa0debc0e3a80d4116e85810f7c55d04
+                refreshTokenTTL: 1771547233
+        default:
+          description: Failure
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      description: >
+        This request exchanges your DriveThruRPG application key for an
+        authentication token.
+
+
+        **Endpoint**
+
+        - `POST {{baseUrl}}/:DTRPG_API_VERSION/auth_key`
+
+        - Uses path variable `DTRPG_API_VERSION` (e.g., `vBeta`).
+
+        - Uses environment variable `DTRPG_APPLICATION_KEY` for the DriveThruRPG
+        application key.
+
+
+        **Behavior**
+
+        On success (`200 OK`), the response body includes:
+
+        - `token`: JWT auth token used to authenticate subsequent requests.
+
+        - `refreshToken`: Token that can be used to obtain a new auth token when
+        the current one expires.
+
+        - `refreshTokenTTL`: Unix timestamp indicating when the refresh token
+        expires.
+    parameters:
+      - name: DTRPG_API_VERSION
+        in: path
+        required: true
+        schema:
+          type: string
+        example: vBeta
+  /{DTRPG_API_VERSION}/order_products:
+    get:
+      summary: Get products
+      parameters:
+        - name: getChecksum
+          in: query
+          description: Should the response include checksums for the files?
+          schema:
+            type: integer
+            enum:
+              - '0'
+              - '1'
+            minimum: 0
+            maximum: 1
+          example: '0'
+        - name: getFilters
+          in: query
+          description: >-
+            Should the response include applicable filter information for the
+            product?
+          schema:
+            type: integer
+          example: '1'
+        - name: page
+          in: query
+          description: The ordinal page number of the response data
+          schema:
+            type: integer
+          example: '1'
+        - name: pageSize
+          in: query
+          description: The maximum number of items to include in the response
+          schema:
+            type: integer
+          example: '50'
+        - name: library
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+        - name: archived
+          in: query
+          description: Should the response data include archived items?
+          schema:
+            type: integer
+          example: '0'
+        - name: updatedDate[after]
+          in: query
+          description: Include items that have been updated after the specified date
+          schema:
+            type: string
+          example: 2025-11-26T14%3A09%3A36-08%3A00
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: '{{DTRPG_AUTH_TOKEN}}'
+      responses:
+        '200':
+          description: Product list
+      tags:
+        - Products
+    parameters:
+      - name: DTRPG_API_VERSION
+        in: path
+        required: true
+        schema:
+          type: string
+        example: 'vBeta'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: applicationKey
+security:
+  - ApiKeyAuth: []
