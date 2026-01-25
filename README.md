@@ -1,2 +1,3 @@
-# dtrpg-api.swift
-An API library for DriveThru RPG in Swift
+# dtrpg-client.swift
+
+A client library for DriveThru RPG API in Swift
