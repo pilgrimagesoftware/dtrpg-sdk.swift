@@ -1,0 +1,38 @@
+name: PR
+
+on:
+    pull_request:
+        branches: [develop]
+
+permissions:
+    contents: read
+
+jobs:
+    tests:
+        name: ${{ matrix.name }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: Linux
+                      os: ubuntu-24.04
+        steps:
+            - uses: actions/checkout@v6
+            - name: Get swift version
+              id: get_swift_version
+              run: |
+                    v=$(cat .swift-version)
+                    echo "swift_version=$v" >> $GITHUB_OUTPUT
+            - uses: swift-actions/setup-swift@v3
+              with:
+                swift-version: ${{ steps.get_swift_version.outputs.swift_version }}
+            - name: Verify swift version
+              run: |
+                    swift --version
+            - name: Build
+              run: |
+                    swift build
+            - name: Run tests
+              run: |
+                    swift test
