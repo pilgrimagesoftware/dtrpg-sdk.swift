@@ -15,8 +15,8 @@ platforms: [
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "DriveThruRPG",
-            targets: ["DriveThruRPG"]
+            name: "DriveThruRPGSDK",
+            targets: ["SDK"]
         ),
     ],
     dependencies: [
@@ -29,7 +29,7 @@ platforms: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "DriveThruRPG",
+            name: "SDK",
             dependencies: [
                 .product(name: "OpenAPIRuntime", package: "swift-openapi-runtime"),
                 .product(name: "OpenAPIURLSession", package: "swift-openapi-urlsession"),
@@ -40,8 +40,8 @@ platforms: [
             ]
         ),
         .testTarget(
-            name: "DriveThruRPGTests",
-            dependencies: ["DriveThruRPG"],
+            name: "SDKTests",
+            dependencies: ["SDK"],
             swiftSettings: swiftSettings
         ),
     ]
