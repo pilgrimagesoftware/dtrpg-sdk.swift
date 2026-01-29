@@ -1,19 +1,20 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
-
 import OpenAPIRuntime
 import OpenAPIURLSession
-import DriveThruRPG
+import Foundation
 
-// Instantiate your chosen transport library.
-let transport: any ClientTransport = URLSessionTransport()
+public class SDK {
+    public static let shared = SDK()
 
-public func makeClient() throws -> Client {
-// Create a client to connect to a server URL documented in the OpenAPI document.
-let client = Client(
-    serverURL: try Servers.Server1.url(),
-    transport: transport
-)
+    // Instantiate your chosen transport library.
+    private let transport: any ClientTransport = URLSessionTransport()
+    var client : Client? = nil
+    var config : Config? = nil
 
-return client
+    public func configure(with config : Config) throws {
+        let url = if let urlString = config.url, let url = URL(string: urlString) { url } else { try Servers.Server1.url() }
+        client = Client(
+            serverURL: url,
+            transport: transport
+        )
+    }
 }
