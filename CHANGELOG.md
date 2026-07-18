@@ -1,4 +1,14 @@
 
+## 0.0.3 - 2026-07-18
+
+### Documentation
+- Correct SPI submission target and record filed issue
+- Add Swift Package Index badges to README
+- Add CI status badge to README
+- Flesh out README with installation, quick start, and release/license links
+
+
+
 ## Unreleased
 
 ### Documentation
