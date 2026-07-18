@@ -1,0 +1,62 @@
+name: CI
+
+concurrency:
+    group: ci
+    cancel-in-progress: true
+
+on:
+    push:
+        branches: [develop]
+        paths:
+            - Sources/**
+            - Tests/**
+            - Package.swift
+            - .swift-version
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+jobs:
+    setup:
+        name: Setup
+        runs-on: ubuntu-latest
+        outputs:
+            swift-version: ${{ steps.get_swift_version.outputs.swift_version }}
+        steps:
+            - uses: actions/checkout@v6
+            - name: Get swift version
+              id: get_swift_version
+              run: |
+                    v=$(cat .swift-version)
+                    echo "swift_version=$v" >> $GITHUB_OUTPUT
+
+    tests:
+        needs: [setup]
+        name: Validate on ${{ matrix.name }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: Linux
+                      os: ubuntu-24.04
+                    - name: macOS (Apple Silicon)
+                      os: macos-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                submodules: true
+            - uses: swift-actions/setup-swift@v3
+              with:
+                swift-version: ${{ needs.setup.outputs.swift-version }}
+                skip-verify-signature: true
+            - name: Verify swift version
+              run: |
+                    swift --version
+            - name: Build
+              run: |
+                    swift build
+            - name: Run tests
+              run: |
+                    swift test
