@@ -1,103 +1,59 @@
 import Foundation
+import OpenAPIRuntime
 
-/// A downloadable file belonging to a library item.
-public struct LibraryFile: Equatable, Sendable {
-    public let title: String
-    public let filename: String
-    public let size: Int
-
-    public init(title: String, filename: String, size: Int) {
-        self.title = title
-        self.filename = filename
-        self.size = size
-    }
-
-    init(file: Components.Schemas.OrderProductFile) {
-        self.init(title: file.title, filename: file.filename, size: file.size)
-    }
-}
-
-/// A single item in the authenticated user's library, mapped from the API's order product resource.
-public struct LibraryItem: Equatable, Sendable {
-    public let orderProductId: Int
-    public let productId: Int
-    public let name: String
-    public let isbn: String?
-    public let finalPrice: Double
-    public let quantity: Int
-    public let isArchived: Bool
-    public let files: [LibraryFile]
-    public let fileLastModified: Date?
-    public let fileLastDownloaded: Date?
+/// Query parameters for the `order_products` (library items) endpoint.
+///
+/// All fields are optional; a `nil` value omits the corresponding query parameter.
+public struct LibraryItemsParams: Sendable {
+    public var page: Int?
+    public var pageSize: Int?
+    public var getChecksum: Bool?
+    public var getFilters: Bool?
+    public var library: Bool?
+    public var archived: Bool?
+    public var updatedDateAfter: Date?
 
     public init(
-        orderProductId: Int,
-        productId: Int,
-        name: String,
-        isbn: String? = nil,
-        finalPrice: Double,
-        quantity: Int,
-        isArchived: Bool,
-        files: [LibraryFile],
-        fileLastModified: Date? = nil,
-        fileLastDownloaded: Date? = nil
+        page: Int? = nil,
+        pageSize: Int? = nil,
+        getChecksum: Bool? = nil,
+        getFilters: Bool? = nil,
+        library: Bool? = nil,
+        archived: Bool? = nil,
+        updatedDateAfter: Date? = nil
     ) {
-        self.orderProductId = orderProductId
-        self.productId = productId
-        self.name = name
-        self.isbn = isbn
-        self.finalPrice = finalPrice
-        self.quantity = quantity
-        self.isArchived = isArchived
-        self.files = files
-        self.fileLastModified = fileLastModified
-        self.fileLastDownloaded = fileLastDownloaded
-    }
-
-    init(item: Components.Schemas.OrderProductItem) {
-        let attributes = item.attributes
-        self.init(
-            orderProductId: attributes.orderProductId,
-            productId: attributes.productId,
-            name: attributes.name,
-            isbn: attributes.isbn,
-            finalPrice: attributes.finalPrice,
-            quantity: attributes.quantity,
-            isArchived: attributes.archived != 0,
-            files: attributes.files.map(LibraryFile.init),
-            fileLastModified: attributes.fileLastModified,
-            fileLastDownloaded: attributes.fileLastDownloaded
-        )
+        self.page = page
+        self.pageSize = pageSize
+        self.getChecksum = getChecksum
+        self.getFilters = getFilters
+        self.library = library
+        self.archived = archived
+        self.updatedDateAfter = updatedDateAfter
     }
 }
 
-/// A single page of library items with the pagination position it was fetched at.
-public struct LibraryPage: Equatable, Sendable {
-    public let items: [LibraryItem]
-    public let currentPage: Int
-    public let itemsPerPage: Int
+/// Query parameters for paginated collection endpoints such as `product_lists`.
+public struct PageParams: Sendable {
+    public var page: Int?
+    public var pageSize: Int?
 
-    public init(items: [LibraryItem], currentPage: Int, itemsPerPage: Int) {
-        self.items = items
-        self.currentPage = currentPage
-        self.itemsPerPage = itemsPerPage
-    }
-
-    init(response: Components.Schemas.OrderProductListResponse) {
-        self.init(
-            items: response.data.map(LibraryItem.init),
-            currentPage: response.meta.currentPage,
-            itemsPerPage: response.meta.itemsPerPage
-        )
+    public init(page: Int? = nil, pageSize: Int? = nil) {
+        self.page = page
+        self.pageSize = pageSize
     }
 }
 
 extension SDK {
-    /// Lists the authenticated user's library items, requiring an active session.
+    /// Lists the authenticated user's ordered products, requiring an active session.
+    ///
+    /// Maps to `GET /{api_version}/order_products`. Returns the generated response type
+    /// directly so callers see exactly what the API contract defines.
     ///
     /// - Throws: `SDKError.authSession` if the session is missing or the backend rejects the request.
     @discardableResult
-    public func listLibraryItems(page: Int? = nil, pageSize: Int? = nil) async throws -> LibraryPage {
+    public func listOrderProducts(
+        _ params: LibraryItemsParams = .init()
+    ) async throws -> Components.Schemas.OrderProductListResponse {
         _ = try requireSession()
         let config = try requireConfig()
         let client = try requireClient()
@@ -105,24 +61,34 @@ extension SDK {
         let output = try await client.getDTRPGAPIVERSIONOrderProducts(
             .init(
                 path: .init(dtrpgApiVersion: config.apiVersion),
-                query: .init(page: page, pageSize: pageSize, library: true)
+                query: .init(
+                    getChecksum: params.getChecksum.map { $0 ? 1 : 0 },
+                    getFilters: params.getFilters.map { $0 ? 1 : 0 },
+                    page: params.page,
+                    pageSize: params.pageSize,
+                    library: params.library,
+                    archived: params.archived.map { $0 ? 1 : 0 },
+                    updatedDate_lbrack_after_rbrack_: params.updatedDateAfter
+                )
             )
         )
 
         switch output {
         case .ok(let ok):
-            return LibraryPage(response: try ok.body.json)
+            return try ok.body.json
         case .default(_, let response):
             throw try invalidateLibrarySession(dueTo: response.body.json)
         }
     }
 
-    /// Retrieves a single library item's detail by its order product ID, requiring an active session.
+    /// Retrieves a single ordered product's detail by its order product ID, requiring an active session.
+    ///
+    /// Maps to `GET /{api_version}/order_products/{orderProductId}`.
     ///
     /// - Throws: `SDKError.authSession` if the session is missing or the backend rejects the request,
     ///   or `SDKError.libraryItemNotFound` if the backend returns no item data.
     @discardableResult
-    public func libraryItemDetail(orderProductId: Int) async throws -> LibraryItem {
+    public func getOrderProduct(orderProductId: Int) async throws -> Components.Schemas.OrderProductItem {
         _ = try requireSession()
         let config = try requireConfig()
         let client = try requireClient()
@@ -136,7 +102,190 @@ extension SDK {
             guard let item = try ok.body.json.data else {
                 throw SDKError.libraryItemNotFound(orderProductId: orderProductId)
             }
-            return LibraryItem(item: item)
+            return item
+        case .default(_, let response):
+            throw try invalidateLibrarySession(dueTo: response.body.json)
+        }
+    }
+
+    /// Prepares a download for the given ordered product, requiring an active session.
+    ///
+    /// Maps to `GET /{api_version}/order_products/{orderProductId}/prepare`. The response
+    /// schema is not yet formally defined by the API contract, so it is returned as a raw
+    /// JSON object rather than a typed model.
+    ///
+    /// - Throws: `SDKError.authSession` if the session is missing or the backend rejects the request.
+    @discardableResult
+    public func prepareDownload(orderProductId: Int) async throws -> OpenAPIObjectContainer {
+        _ = try requireSession()
+        let config = try requireConfig()
+        let client = try requireClient()
+
+        let output = try await client.getDTRPGAPIVERSIONOrderProductsOrderProductIdPrepare(
+            .init(path: .init(dtrpgApiVersion: config.apiVersion, orderProductId: orderProductId))
+        )
+
+        switch output {
+        case .ok(let ok):
+            return try ok.body.json
+        case .default(_, let response):
+            throw try invalidateLibrarySession(dueTo: response.body.json)
+        }
+    }
+
+    /// Lists the authenticated user's product lists (collections), requiring an active session.
+    ///
+    /// Maps to `GET /{api_version}/product_lists`.
+    ///
+    /// - Throws: `SDKError.authSession` if the session is missing or the backend rejects the request.
+    @discardableResult
+    public func listProductLists(
+        _ params: PageParams = .init()
+    ) async throws -> Components.Schemas.ProductListCollectionResponse {
+        _ = try requireSession()
+        let config = try requireConfig()
+        let client = try requireClient()
+
+        let output = try await client.getDTRPGAPIVERSIONProductLists(
+            .init(
+                path: .init(dtrpgApiVersion: config.apiVersion),
+                query: .init(page: params.page, pageSize: params.pageSize)
+            )
+        )
+
+        switch output {
+        case .ok(let ok):
+            return try ok.body.json
+        case .default(_, let response):
+            throw try invalidateLibrarySession(dueTo: response.body.json)
+        }
+    }
+
+    /// Creates a new product list (collection), requiring an active session.
+    ///
+    /// Maps to `POST /{api_version}/product_lists`.
+    ///
+    /// - Throws: `SDKError.authSession` if the session is missing or the backend rejects the request.
+    @discardableResult
+    public func createProductList(name: String) async throws -> Components.Schemas.ProductListAttributes {
+        _ = try requireSession()
+        let config = try requireConfig()
+        let client = try requireClient()
+
+        let output = try await client.postDTRPGAPIVERSIONProductLists(
+            .init(
+                path: .init(dtrpgApiVersion: config.apiVersion),
+                body: .json(.init(name: name))
+            )
+        )
+
+        switch output {
+        case .created(let created):
+            return try created.body.json
+        case .default(_, let response):
+            throw try invalidateLibrarySession(dueTo: response.body.json)
+        }
+    }
+
+    /// Deletes a product list (collection), requiring an active session.
+    ///
+    /// Maps to `DELETE /{api_version}/product_lists/{productListId}`.
+    ///
+    /// - Throws: `SDKError.authSession` if the session is missing or the backend rejects the request.
+    public func deleteProductList(productListId: Int) async throws {
+        _ = try requireSession()
+        let config = try requireConfig()
+        let client = try requireClient()
+
+        let output = try await client.deleteDTRPGAPIVERSIONProductListsProductListId(
+            .init(path: .init(dtrpgApiVersion: config.apiVersion, productListId: productListId))
+        )
+
+        switch output {
+        case .noContent:
+            return
+        case .default(_, let response):
+            throw try invalidateLibrarySession(dueTo: response.body.json)
+        }
+    }
+
+    /// Lists the items within a specific product list, requiring an active session.
+    ///
+    /// Maps to `GET /{api_version}/product_list_items?productListId={productListId}`. Individual
+    /// item schemas are not yet formally defined by the API contract, so items are returned as
+    /// raw JSON objects rather than a typed model.
+    ///
+    /// - Throws: `SDKError.authSession` if the session is missing or the backend rejects the request.
+    @discardableResult
+    public func listProductListItems(
+        productListId: Int,
+        params: PageParams = .init()
+    ) async throws -> Components.Schemas.PaginatedResponse {
+        _ = try requireSession()
+        let config = try requireConfig()
+        let client = try requireClient()
+
+        let output = try await client.getDTRPGAPIVERSIONProductListItems(
+            .init(
+                path: .init(dtrpgApiVersion: config.apiVersion),
+                query: .init(page: params.page, pageSize: params.pageSize, productListId: productListId)
+            )
+        )
+
+        switch output {
+        case .ok(let ok):
+            return try ok.body.json
+        case .default(_, let response):
+            throw try invalidateLibrarySession(dueTo: response.body.json)
+        }
+    }
+
+    /// Adds a product to a product list, requiring an active session.
+    ///
+    /// Maps to `POST /{api_version}/product_list_items`.
+    ///
+    /// - Throws: `SDKError.authSession` if the session is missing or the backend rejects the request.
+    @discardableResult
+    public func addProductListItem(
+        productId: Int,
+        productListId: Int
+    ) async throws -> Components.Schemas.ProductListItemCreateResponse {
+        _ = try requireSession()
+        let config = try requireConfig()
+        let client = try requireClient()
+
+        let output = try await client.postDTRPGAPIVERSIONProductListItems(
+            .init(
+                path: .init(dtrpgApiVersion: config.apiVersion),
+                body: .json(.init(productId: productId, productListId: productListId))
+            )
+        )
+
+        switch output {
+        case .created(let created):
+            return try created.body.json
+        case .default(_, let response):
+            throw try invalidateLibrarySession(dueTo: response.body.json)
+        }
+    }
+
+    /// Removes a product from a product list, requiring an active session.
+    ///
+    /// Maps to `DELETE /{api_version}/product_list_items/{productListItemId}`.
+    ///
+    /// - Throws: `SDKError.authSession` if the session is missing or the backend rejects the request.
+    public func deleteProductListItem(productListItemId: Int) async throws {
+        _ = try requireSession()
+        let config = try requireConfig()
+        let client = try requireClient()
+
+        let output = try await client.deleteDTRPGAPIVERSIONProductListItemsProductListItemId(
+            .init(path: .init(dtrpgApiVersion: config.apiVersion, productListItemId: productListItemId))
+        )
+
+        switch output {
+        case .noContent:
+            return
         case .default(_, let response):
             throw try invalidateLibrarySession(dueTo: response.body.json)
         }

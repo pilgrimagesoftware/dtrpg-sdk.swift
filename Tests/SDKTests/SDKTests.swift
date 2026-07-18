@@ -161,6 +161,30 @@ final class AuthClientStub: APIProtocol, @unchecked Sendable {
     ) async throws -> Operations.GetDTRPGAPIVERSIONProductListItems.Output {
         fatalError("Not used by auth tests")
     }
+
+    func postDTRPGAPIVERSIONProductLists(
+        _ input: Operations.PostDTRPGAPIVERSIONProductLists.Input
+    ) async throws -> Operations.PostDTRPGAPIVERSIONProductLists.Output {
+        fatalError("Not used by auth tests")
+    }
+
+    func deleteDTRPGAPIVERSIONProductListsProductListId(
+        _ input: Operations.DeleteDTRPGAPIVERSIONProductListsProductListId.Input
+    ) async throws -> Operations.DeleteDTRPGAPIVERSIONProductListsProductListId.Output {
+        fatalError("Not used by auth tests")
+    }
+
+    func postDTRPGAPIVERSIONProductListItems(
+        _ input: Operations.PostDTRPGAPIVERSIONProductListItems.Input
+    ) async throws -> Operations.PostDTRPGAPIVERSIONProductListItems.Output {
+        fatalError("Not used by auth tests")
+    }
+
+    func deleteDTRPGAPIVERSIONProductListItemsProductListItemId(
+        _ input: Operations.DeleteDTRPGAPIVERSIONProductListItemsProductListItemId.Input
+    ) async throws -> Operations.DeleteDTRPGAPIVERSIONProductListItemsProductListItemId.Output {
+        fatalError("Not used by auth tests")
+    }
 }
 
 private extension Operations.PostDTRPGAPIVERSIONAuthKey.Output {

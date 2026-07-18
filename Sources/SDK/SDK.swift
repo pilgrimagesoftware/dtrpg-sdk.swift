@@ -33,7 +33,8 @@ public final class SDK {
             serverURL: url,
             transport: transport,
             middlewares: [
-                ApplicationKeyMiddleware(apiKey: config.apiKey)
+                ApplicationKeyMiddleware(apiKey: config.apiKey),
+                BearerTokenMiddleware(tokenProvider: { [weak self] in self?.session?.token })
             ]
         )
     }
