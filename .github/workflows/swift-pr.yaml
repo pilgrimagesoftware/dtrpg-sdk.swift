@@ -9,7 +9,7 @@ permissions:
 
 jobs:
     tests:
-        name: ${{ matrix.name }}
+        name: Validate on ${{ matrix.name }}
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
@@ -17,6 +17,8 @@ jobs:
                 include:
                     - name: Linux
                       os: ubuntu-24.04
+                    - name: macOS (Apple Silicon)
+                      os: macos-latest
         steps:
             - uses: actions/checkout@v6
               with:
