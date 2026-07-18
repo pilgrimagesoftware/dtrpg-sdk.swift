@@ -88,13 +88,14 @@ This project uses **Swift 6.2.3** (specified in `.swift-version`). The package r
 
 ## CI/CD Pipeline
 
-The project has two main workflows:
-- **PR Workflow** (`.github/workflows/swift-pr.yaml`) - Runs on pull requests to `develop`, executes build and tests
-- **CI Workflow** (`.github/workflows/swift-ci.yaml`) - Runs on pushes to `develop`, includes:
-  - Build and test
-  - Documentation generation and publishing to `gh-pages` branch
-  - Automatic version tagging (patch bump by default)
-  - Repository dispatch notification to `dtrpg-app.swift`
+- **PR Workflow** (`.github/workflows/swift-pr.yaml`) - Runs on pull requests to `develop`: manifest validation,
+  build, and tests on Linux and macOS (Apple Silicon).
+- **CI Workflow** (`.github/workflows/swift-ci.yaml`) - Runs on pushes to `develop`: build, test, and DocC
+  generation/publish to `gh-pages`.
+- **Release pipeline** (`.github/workflows/prepare-release.yaml`, `tag-release.yaml`, `release.yaml`) - See
+  [RELEASE.md](RELEASE.md). Releases are deliberate (triggered via `workflow_dispatch`), not automatic on every
+  push to `develop`: a changelog PR is opened against `master`, merging it tags the release, and the tag push
+  builds, tests, publishes the GitHub Release, and syncs `master` back into `develop`.
 
 ## Development Notes
 
@@ -118,4 +119,5 @@ The project uses Swift's native **Testing** framework (not XCTest). Tests import
 - Main branch: `master`
 - Development branch: `develop`
 - PRs should target `develop`
-- CI automatically tags and publishes from `develop`
+- Releases reach `master` only via the automated release process (see [RELEASE.md](RELEASE.md)); do not push
+  or open PRs directly against `master`
