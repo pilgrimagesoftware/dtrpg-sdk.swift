@@ -19,6 +19,8 @@ jobs:
                       os: ubuntu-24.04
         steps:
             - uses: actions/checkout@v6
+              with:
+                submodules: true
             - name: Get swift version
               id: get_swift_version
               run: |
@@ -27,6 +29,7 @@ jobs:
             - uses: swift-actions/setup-swift@v3
               with:
                 swift-version: ${{ steps.get_swift_version.outputs.swift_version }}
+                skip-verify-signature: true
             - name: Verify swift version
               run: |
                     swift --version

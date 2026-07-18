@@ -75,7 +75,7 @@ extension SDK {
     }
 }
 
-private extension AuthSessionError {
+extension AuthSessionError {
     init(apiError: Components.Schemas.AuthSessionError) {
         self.init(
             errorCode: apiError.errorCode,
@@ -85,7 +85,7 @@ private extension AuthSessionError {
     }
 }
 
-private extension AuthState {
+extension AuthState {
     init(apiState: Components.Schemas.AuthSessionError.AuthStatePayload) {
         switch apiState {
         case .unauthenticated:

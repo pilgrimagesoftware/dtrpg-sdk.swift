@@ -44,9 +44,12 @@ jobs:
                       os: ubuntu-24.04
         steps:
             - uses: actions/checkout@v6
+              with:
+                submodules: true
             - uses: swift-actions/setup-swift@v3
               with:
                 swift-version: ${{ needs.setup.outputs.swift-version }}
+                skip-verify-signature: true
             - name: Verify swift version
               run: |
                     swift --version
@@ -64,9 +67,12 @@ jobs:
         concurrency: docs
         steps:
             - uses: actions/checkout@v6
+              with:
+                submodules: true
             - uses: swift-actions/setup-swift@v3
               with:
                 swift-version: ${{ needs.setup.outputs.swift-version }}
+                skip-verify-signature: true
             - name: Build documentation
               run: |
                     export SWIFTPM_ENABLE_COMMAND_PLUGINS=1

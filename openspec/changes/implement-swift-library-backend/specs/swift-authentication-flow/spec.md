@@ -22,6 +22,17 @@ The Swift SDK MUST expose Swift-native operations for requiring, applying, clear
 - **WHEN** the SDK invalidates an active session because of an auth/session failure
 - **THEN** it clears the stored session while preserving the error that caused the invalidation
 
+### Requirement: Swift authentication flow must attach the active session's bearer token to outgoing requests
+The Swift SDK MUST read the current session at request time and attach its token as an `Authorization: Bearer <token>` header, so that library workflow operations are authenticated without each operation managing the header itself.
+
+#### Scenario: Session is active when a request is sent
+- **WHEN** the SDK sends any request while an active session exists
+- **THEN** the request carries an `Authorization: Bearer <token>` header using the current session's token
+
+#### Scenario: No session exists when a request is sent
+- **WHEN** the SDK sends a request while no session exists
+- **THEN** the request omits the `Authorization` header entirely
+
 ### Requirement: Swift authentication errors must preserve API meaning
 The Swift SDK MUST translate authentication failures into Swift-facing behavior without obscuring the meaning of the underlying API failure.
 
