@@ -19,8 +19,8 @@ The repository MUST be public, MIT-licensed with a `LICENSE.md`, define a `Packa
 - **THEN** the repository is public, has a valid `Package.swift`, and has at least one `vX.Y.Z` tag from the existing tag-on-push-to-develop workflow
 
 ### Requirement: The package MUST be submitted to Swift Package Index exactly once, with explicit confirmation
-Submission to Swift Package Index MUST be performed via the "Add a Package" GitHub Issue against `SwiftPackageIndex/SwiftPackageIndex-Server`, and MUST NOT be filed without the user's explicit, in-conversation confirmation immediately beforehand, since it is a public action on a third-party repository.
+Submission to Swift Package Index MUST be performed via the "Add Package(s)" GitHub Issue template on `SwiftPackageIndex/PackageList`, and MUST NOT be filed without the user's explicit, in-conversation confirmation immediately beforehand, since it is a public action on a third-party repository.
 
 #### Scenario: Submitting the package
 - **WHEN** all indexing prerequisites and the manifest-validation CI check are confirmed passing
-- **THEN** the "Add a Package" issue is filed against `SwiftPackageIndex/SwiftPackageIndex-Server` referencing the repository's HTTPS `.git` URL, only after the user has explicitly confirmed the submission
+- **THEN** the "Add Package(s)" issue is filed against `SwiftPackageIndex/PackageList` referencing the repository's HTTPS `.git` URL, only after the user has explicitly confirmed the submission

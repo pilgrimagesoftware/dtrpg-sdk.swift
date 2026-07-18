@@ -12,6 +12,6 @@
 
 ## 3. Submission
 
-- [ ] 3.1 Confirm with the user before filing the public submission issue
-- [ ] 3.2 File the "Add a Package" GitHub Issue against `SwiftPackageIndex/SwiftPackageIndex-Server`
-- [ ] 3.3 Record the issue URL in this change's proposal for traceability
+- [x] 3.1 Confirm with the user before filing the public submission issue
+- [x] 3.2 File the "Add Package(s)" GitHub Issue against `SwiftPackageIndex/PackageList`
+- [x] 3.3 Record the issue URL in this change's proposal for traceability
