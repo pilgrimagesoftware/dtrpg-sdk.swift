@@ -42,13 +42,8 @@ jobs:
                 include:
                     - name: Linux
                       os: ubuntu-24.04
-                      arch-flag: ""
                     - name: macOS (Apple Silicon)
                       os: macos-latest
-                      arch-flag: ""
-                    - name: macOS (Intel)
-                      os: macos-latest
-                      arch-flag: "--arch x86_64"
         steps:
             - uses: actions/checkout@v6
               with:
@@ -62,10 +57,10 @@ jobs:
                     swift --version
             - name: Build
               run: |
-                    swift build ${{ matrix.arch-flag }}
+                    swift build
             - name: Run tests
               run: |
-                    swift test ${{ matrix.arch-flag }}
+                    swift test
 
     docs:
         needs: [setup, tests]
