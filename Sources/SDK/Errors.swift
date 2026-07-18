@@ -4,6 +4,7 @@ public enum SDKError: Error, Equatable {
     case malformedAuthResponse
     case authenticationFailed(statusCode: Int)
     case authSession(AuthSessionError)
+    case libraryItemNotFound(orderProductId: Int)
 }
 
 public enum AuthState: String, Equatable, Sendable {
