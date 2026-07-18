@@ -1,6 +1,6 @@
 # dtrpg-sdk.swift
 
-[![PR](https://github.com/pilgrimagesoftware/dtrpg-sdk.swift/actions/workflows/swift-pr.yaml/badge.svg?branch=develop)](https://github.com/pilgrimagesoftware/dtrpg-sdk.swift/actions/workflows/swift-pr.yaml)
+[![PR](https://github.com/pilgrimagesoftware/dtrpg-sdk.swift/actions/workflows/pr.yaml/badge.svg?branch=develop)](https://github.com/pilgrimagesoftware/dtrpg-sdk.swift/actions/workflows/pr.yaml)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fpilgrimagesoftware%2Fdtrpg-sdk.swift%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/pilgrimagesoftware/dtrpg-sdk.swift)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fpilgrimagesoftware%2Fdtrpg-sdk.swift%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/pilgrimagesoftware/dtrpg-sdk.swift)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)

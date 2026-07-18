@@ -85,9 +85,9 @@ This project uses **Swift 6.2.3** (specified in `.swift-version`). The package r
 
 ## CI/CD Pipeline
 
-- **PR Workflow** (`.github/workflows/swift-pr.yaml`) - Runs on pull requests to `develop`: manifest validation,
-  build, and tests on Linux and macOS (Apple Silicon).
-- **CI Workflow** (`.github/workflows/swift-ci.yaml`) - Runs on pushes to `develop`: build and test.
+- **PR Workflow** (`.github/workflows/pr.yaml`) - Runs on pull requests to `develop` or `master`: manifest
+  validation, build, and tests on Linux and macOS (Apple Silicon).
+- **CI Workflow** (`.github/workflows/ci.yaml`) - Runs on pushes to `develop`: build and test.
 - **Release pipeline** (`.github/workflows/prepare-release.yaml`, `tag-release.yaml`, `release.yaml`) - See
   [RELEASE.md](RELEASE.md). Releases are deliberate (triggered via `workflow_dispatch`), not automatic on every
   push to `develop`: a changelog PR is opened against `master`, merging it tags the release, and the tag push

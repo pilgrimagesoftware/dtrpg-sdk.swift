@@ -25,7 +25,7 @@ Trigger the [**Prepare Release**](https://github.com/pilgrimagesoftware/dtrpg-sd
 Unlike `dtrpg-sdk.rs`, there's no manifest version to bump — SwiftPM has no version field in `Package.swift`;
 a package's version is purely whatever git tag points at a given commit.
 
-You review the PR (catch anything that shouldn't ship) — the [**PR**](https://github.com/pilgrimagesoftware/dtrpg-sdk.swift/actions/workflows/swift-pr.yaml)
+You review the PR (catch anything that shouldn't ship) — the [**PR**](https://github.com/pilgrimagesoftware/dtrpg-sdk.swift/actions/workflows/pr.yaml)
 workflow runs against it — and merge into `master`.
 
 Merging triggers [**Tag Release**](https://github.com/pilgrimagesoftware/dtrpg-sdk.swift/actions/workflows/tag-release.yaml),
