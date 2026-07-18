@@ -21,7 +21,9 @@ The SDK uses **Swift OpenAPI Generator** as a build plugin to automatically gene
   - `Auth.swift` - Authentication methods (extends SDK)
   - `Config.swift` - Configuration struct (API key, optional custom URL)
   - `Errors.swift` - SDK-specific error types
-  - `OrderProducts.swift` - Product ordering functionality (currently empty)
+  - `Library.swift` - Library backend operations (order products, product lists/items)
+  - `BearerTokenMiddleware.swift` - Attaches the session bearer token to authenticated requests
+  - `ApplicationKeyMiddleware.swift` - Attaches the application key to every request
   - `openapi.yaml` - Symlink to `../../API/openapi.yaml`
   - `openapi-generator-config.yaml` - Generator configuration
 - `Tests/SDKTests/` - Test suite
@@ -61,16 +63,11 @@ swift test --filter <test-name>
 swift package clean
 ```
 
-### Generate Documentation
-```bash
-swift package --allow-writing-to-directory docs \
-      generate-documentation \
-      --target DriveThruRPGSDK \
-      --output-path docs \
-      --disable-indexing \
-      --transform-for-static-hosting \
-      --hosting-base-path dtrpg-sdk-swift
-```
+### Documentation
+
+Hosted automatically by the [Swift Package Index](https://swiftpackageindex.com/pilgrimagesoftware/dtrpg-sdk.swift)
+once indexed (the same role `docs.rs` plays for the Rust SDK) — no repo-side generation or publishing step is
+needed.
 
 ### Update API Submodule
 Since the OpenAPI spec is in a git submodule:
@@ -88,13 +85,13 @@ This project uses **Swift 6.2.3** (specified in `.swift-version`). The package r
 
 ## CI/CD Pipeline
 
-The project has two main workflows:
-- **PR Workflow** (`.github/workflows/swift-pr.yaml`) - Runs on pull requests to `develop`, executes build and tests
-- **CI Workflow** (`.github/workflows/swift-ci.yaml`) - Runs on pushes to `develop`, includes:
-  - Build and test
-  - Documentation generation and publishing to `gh-pages` branch
-  - Automatic version tagging (patch bump by default)
-  - Repository dispatch notification to `dtrpg-app.swift`
+- **PR Workflow** (`.github/workflows/pr.yaml`) - Runs on pull requests to `develop` or `master`: manifest
+  validation, build, and tests on Linux and macOS (Apple Silicon).
+- **CI Workflow** (`.github/workflows/ci.yaml`) - Runs on pushes to `develop`: build and test.
+- **Release pipeline** (`.github/workflows/prepare-release.yaml`, `tag-release.yaml`, `release.yaml`) - See
+  [RELEASE.md](RELEASE.md). Releases are deliberate (triggered via `workflow_dispatch`), not automatic on every
+  push to `develop`: a changelog PR is opened against `master`, merging it tags the release, and the tag push
+  builds, tests, publishes the GitHub Release, and syncs `master` back into `develop`.
 
 ## Development Notes
 
@@ -118,4 +115,5 @@ The project uses Swift's native **Testing** framework (not XCTest). Tests import
 - Main branch: `master`
 - Development branch: `develop`
 - PRs should target `develop`
-- CI automatically tags and publishes from `develop`
+- Releases reach `master` only via the automated release process (see [RELEASE.md](RELEASE.md)); do not push
+  or open PRs directly against `master`

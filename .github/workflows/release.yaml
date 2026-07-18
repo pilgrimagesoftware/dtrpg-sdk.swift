@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to (re-)run the release for, e.g. v0.1.0"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency: release
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate token
+        id: psw_ci_token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.PSW_CI_APP_ID }}
+          private-key: ${{ secrets.PSW_CI_PRIVATE_KEY }}
+
+      - name: Resolve tag
+        id: resolve_tag
+        run: |
+          echo "tag=${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          token: ${{ steps.psw_ci_token.outputs.token }}
+          ref: ${{ steps.resolve_tag.outputs.tag }}
+          fetch-depth: 0 # full history required for git-cliff
+          fetch-tags: true
+          show-progress: true
+          submodules: recursive
+
+      - name: Get swift version
+        id: get_swift_version
+        run: |
+              v=$(cat .swift-version)
+              echo "swift_version=$v" >> $GITHUB_OUTPUT
+
+      - uses: swift-actions/setup-swift@v3
+        with:
+          swift-version: ${{ steps.get_swift_version.outputs.swift_version }}
+          skip-verify-signature: true
+
+      - name: Test
+        run: |
+          swift test
+
+      - name: Install git-cliff
+        uses: taiki-e/install-action@v2
+        with:
+          tool: git-cliff
+
+      - name: Generate changelog for this tag
+        run: |
+          git-cliff --current --strip header -o RELEASE_NOTES.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.resolve_tag.outputs.tag }}
+          body_path: RELEASE_NOTES.md
+
+      - name: Update develop from master
+        run: |
+          git config --global user.email "ci@pilgrimagesoftware.com"
+          git config --global user.name "Pilgrimage Software CI"
+          git checkout develop
+          git merge origin/master
+          git push origin develop

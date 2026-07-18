@@ -2,14 +2,14 @@ name: PR
 
 on:
     pull_request:
-        branches: [develop]
+        branches: [develop, master]
 
 permissions:
     contents: read
 
 jobs:
     tests:
-        name: ${{ matrix.name }}
+        name: Validate on ${{ matrix.name }}
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
@@ -17,6 +17,8 @@ jobs:
                 include:
                     - name: Linux
                       os: ubuntu-24.04
+                    - name: macOS (Apple Silicon)
+                      os: macos-latest
         steps:
             - uses: actions/checkout@v6
               with:
@@ -33,6 +35,9 @@ jobs:
             - name: Verify swift version
               run: |
                     swift --version
+            - name: Validate package manifest
+              run: |
+                    swift package dump-package > /dev/null
             - name: Build
               run: |
                     swift build
