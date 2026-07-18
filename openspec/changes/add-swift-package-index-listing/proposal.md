@@ -6,7 +6,7 @@ The Swift SDK is a public, MIT-licensed package that other Swift projects (inclu
 
 - Verify and document that the existing CI/release pipeline already satisfies SPI's indexing prerequisites: public repo, valid `Package.swift`, Swift 5+, at least one semver-tagged release, and a package that resolves and builds cleanly.
 - Add a CI validation step that runs `swift package dump-package` (and `swift package resolve`) as an explicit pre-submission gate, so a manifest regression is caught before it would cause an SPI indexing/build failure.
-- Submit the package to Swift Package Index via its "Add a Package" GitHub Issue process against `SwiftPackageIndex/SwiftPackageIndex-Server` (not a `PackageList` pull request, which is no longer the submission path).
+- Submit the package to Swift Package Index via the "Add Package(s)" issue template on `SwiftPackageIndex/PackageList` (the current submission path — an issue against that repo, not a pull request, and not against `SwiftPackageIndex-Server`).
 
 ## Capabilities
 
@@ -19,5 +19,5 @@ The Swift SDK is a public, MIT-licensed package that other Swift projects (inclu
 ## Impact
 
 - `dtrpg-sdk/swift`: Adds a package-manifest validation step to CI (`.github/workflows/swift-pr.yaml` and/or `swift-ci.yaml`).
-- External: Files a GitHub Issue against `SwiftPackageIndex/SwiftPackageIndex-Server` to request indexing. This is a one-time, user-confirmed action since it is publicly visible on a third-party repository.
+- External: Files a GitHub Issue against `SwiftPackageIndex/PackageList` to request indexing. This is a one-time, user-confirmed action since it is publicly visible on a third-party repository. Filed: https://github.com/SwiftPackageIndex/PackageList/issues/14459
 - No `.spi.yml` manifest is added — the package's single macOS library target should resolve correctly under SPI's default build-scheme detection, and no custom build/documentation configuration is currently needed.

@@ -33,6 +33,9 @@ jobs:
             - name: Verify swift version
               run: |
                     swift --version
+            - name: Validate package manifest
+              run: |
+                    swift package dump-package > /dev/null
             - name: Build
               run: |
                     swift build
