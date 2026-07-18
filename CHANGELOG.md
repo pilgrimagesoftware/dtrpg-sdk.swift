@@ -1,0 +1,22 @@
+
+## Unreleased
+
+### Documentation
+- Correct SPI submission target and record filed issue
+- Add Swift Package Index badges to README
+
+
+## 0.0.2 - 2026-07-18
+
+### Added
+- Implement Swift SDK library backend operations
+- Align Swift library backend with Rust SDK scope and API contract fidelity
+
+
+### Documentation
+- Add Swift change specs
+- Propose add-swift-package-index-listing change
+
+
+## 0.0.1 - 2026-01-25
+
