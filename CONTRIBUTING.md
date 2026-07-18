@@ -12,6 +12,6 @@ adhering to this standard will not be included in the generated changelog.
 ## Branching and pull requests
 
 - Branch from `develop`, open pull requests against `develop`.
-- CI (`.github/workflows/swift-pr.yaml`) must pass on Linux and macOS (Apple Silicon) before merging.
+- CI (`.github/workflows/pr.yaml`) must pass on Linux and macOS (Apple Silicon) before merging.
 - Do not open pull requests directly against `master` — releases reach `master` only via the automated release
   process described in [RELEASE.md](RELEASE.md).
