@@ -37,9 +37,9 @@ git push origin v0.3.0
 ```
 
 The tag push triggers the [**Release**](https://github.com/pilgrimagesoftware/dtrpg-sdk.swift/actions/workflows/release.yaml)
-workflow, which builds, tests, generates the changelog scoped to that tag, attaches it to the GitHub Release, merges
-`master` back into `develop`, and notifies `dtrpg-app.swift` via repository dispatch. Swift Package Index does not need
-an explicit publish step — it polls public repositories for new semver tags and indexes them automatically.
+workflow, which builds, tests, generates the changelog scoped to that tag, attaches it to the GitHub Release, and
+merges `master` back into `develop`. Swift Package Index does not need an explicit publish step — it polls public
+repositories for new semver tags and indexes them automatically.
 
 ## Triggering the run
 

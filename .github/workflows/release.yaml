@@ -75,27 +75,9 @@ jobs:
           body_path: RELEASE_NOTES.md
 
       - name: Update develop from master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.email "ci@pilgrimagesoftware.com"
           git config --global user.name "Pilgrimage Software CI"
           git checkout develop
           git merge origin/master
           git push origin develop
-
-  notify:
-    needs: [publish]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - repo: dtrpg-app.swift
-    steps:
-      - uses: juztcode/repo-ditpatch-action@v1
-        continue-on-error: true
-        with:
-          event-type: core-published
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          repository: pilgrimagesoftware/${{ matrix.repo }}
