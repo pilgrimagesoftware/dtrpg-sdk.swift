@@ -19,6 +19,8 @@ jobs:
                       os: ubuntu-24.04
         steps:
             - uses: actions/checkout@v6
+              with:
+                submodules: true
             - name: Get swift version
               id: get_swift_version
               run: |

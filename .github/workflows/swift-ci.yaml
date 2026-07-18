@@ -44,6 +44,8 @@ jobs:
                       os: ubuntu-24.04
         steps:
             - uses: actions/checkout@v6
+              with:
+                submodules: true
             - uses: swift-actions/setup-swift@v3
               with:
                 swift-version: ${{ needs.setup.outputs.swift-version }}
@@ -65,6 +67,8 @@ jobs:
         concurrency: docs
         steps:
             - uses: actions/checkout@v6
+              with:
+                submodules: true
             - uses: swift-actions/setup-swift@v3
               with:
                 swift-version: ${{ needs.setup.outputs.swift-version }}
