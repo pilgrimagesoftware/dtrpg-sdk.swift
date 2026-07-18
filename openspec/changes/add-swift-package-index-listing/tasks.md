@@ -1,14 +1,14 @@
 ## 1. Prerequisite Verification
 
-- [ ] 1.1 Confirm the repository is public and MIT-licensed (`LICENSE.md` present)
-- [ ] 1.2 Confirm `Package.swift` declares `swift-tools-version` 5.0 or later
-- [ ] 1.3 Confirm the existing `swift-ci.yaml` tag job produces valid semver `vX.Y.Z` tags
+- [x] 1.1 Confirm the repository is public and MIT-licensed (`LICENSE.md` present)
+- [x] 1.2 Confirm `Package.swift` declares `swift-tools-version` 5.0 or later
+- [x] 1.3 Confirm the existing `swift-ci.yaml` tag job produces valid semver `vX.Y.Z` tags
 
 ## 2. CI Validation Gate
 
-- [ ] 2.1 Add a `swift package dump-package` step to `.github/workflows/swift-pr.yaml`
-- [ ] 2.2 Verify the new step passes on the current `Package.swift`
-- [ ] 2.3 Verify the new step fails the workflow if the manifest is broken (smoke test)
+- [x] 2.1 Add a `swift package dump-package` step to `.github/workflows/swift-pr.yaml`
+- [x] 2.2 Verify the new step passes on the current `Package.swift`
+- [x] 2.3 Verify the new step fails the workflow if the manifest is broken (smoke test)
 
 ## 3. Submission
 
