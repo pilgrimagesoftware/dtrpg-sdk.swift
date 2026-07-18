@@ -16,7 +16,6 @@ on:
 
 permissions:
     contents: write
-    pages: write
 
 jobs:
     setup:
@@ -61,35 +60,3 @@ jobs:
             - name: Run tests
               run: |
                     swift test
-
-    docs:
-        needs: [setup, tests]
-        runs-on: ubuntu-latest
-        continue-on-error: true
-        concurrency: docs
-        steps:
-            - uses: actions/checkout@v6
-              with:
-                submodules: true
-            - uses: swift-actions/setup-swift@v3
-              with:
-                swift-version: ${{ needs.setup.outputs.swift-version }}
-                skip-verify-signature: true
-            - name: Build documentation
-              run: |
-                    export SWIFTPM_ENABLE_COMMAND_PLUGINS=1
-                    swift package --allow-writing-to-directory docs \
-                          generate-documentation \
-                          --target DriveThruRPG \
-                          --output-path docs \
-                          --disable-indexing \
-                          --transform-for-static-hosting \
-                          --hosting-base-path dtrpg-sdk-swift
-            - name: Commit and push generated documentation
-              run: |
-                    git config --local user.email "github-actions[bot]@users.noreply.github.com"
-                    git config --local user.name "github-actions[bot]"
-                    git switch gh-pages
-                    git add ./docs
-                    git commit -a -m "Generated Swift DocC"
-                    git push origin gh-pages
