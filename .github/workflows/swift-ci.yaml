@@ -47,6 +47,7 @@ jobs:
             - uses: swift-actions/setup-swift@v3
               with:
                 swift-version: ${{ needs.setup.outputs.swift-version }}
+                skip-verify-signature: true
             - name: Verify swift version
               run: |
                     swift --version
@@ -67,6 +68,7 @@ jobs:
             - uses: swift-actions/setup-swift@v3
               with:
                 swift-version: ${{ needs.setup.outputs.swift-version }}
+                skip-verify-signature: true
             - name: Build documentation
               run: |
                     export SWIFTPM_ENABLE_COMMAND_PLUGINS=1
