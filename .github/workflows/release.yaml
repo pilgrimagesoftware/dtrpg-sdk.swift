@@ -35,7 +35,7 @@ jobs:
           echo "tag=${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}" >> "$GITHUB_OUTPUT"
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ steps.psw_ci_token.outputs.token }}
           ref: ${{ steps.resolve_tag.outputs.tag }}
