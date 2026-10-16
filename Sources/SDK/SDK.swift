@@ -1,6 +1,9 @@
 import OpenAPIRuntime
 import OpenAPIURLSession
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public final class SDK {
     public static let shared = SDK()
