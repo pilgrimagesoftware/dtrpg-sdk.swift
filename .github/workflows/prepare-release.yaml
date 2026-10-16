@@ -22,7 +22,7 @@ jobs:
           app-id: ${{ secrets.PSW_CI_APP_ID }}
           private-key: ${{ secrets.PSW_CI_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # full history required for git-cliff
           fetch-tags: true

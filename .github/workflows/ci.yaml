@@ -24,7 +24,7 @@ jobs:
         outputs:
             swift-version: ${{ steps.get_swift_version.outputs.swift_version }}
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - name: Get swift version
               id: get_swift_version
               run: |
@@ -44,7 +44,7 @@ jobs:
                     - name: macOS (Apple Silicon)
                       os: macos-latest
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
               with:
                 submodules: true
             - uses: swift-actions/setup-swift@v3
