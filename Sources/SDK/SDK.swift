@@ -1,6 +1,9 @@
 import OpenAPIRuntime
 import OpenAPIURLSession
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public final class SDK {
     public static let shared = SDK()
@@ -9,6 +12,12 @@ public final class SDK {
     var client: (any APIProtocol)?
     public private(set) var config: Config?
     public private(set) var session: AuthSession?
+
+    /// Sends the token refresh request. The refresh endpoint is not in the OpenAPI document,
+    /// so it bypasses the generated client; tests replace this to avoid the network.
+    var refreshSender: @Sendable (URLRequest) async throws -> (Data, URLResponse) = { request in
+        try await URLSession.shared.data(for: request)
+    }
 
     public init() {}
 
@@ -22,12 +31,15 @@ public final class SDK {
         self.session = session
     }
 
-    public func configure(with config: Config) throws {
-        let url = if let urlString = config.url, let url = URL(string: urlString) {
-            url
-        } else {
-            try Servers.Server1.url()
+    func baseURL(for config: Config) throws -> URL {
+        if let urlString = config.url, let url = URL(string: urlString) {
+            return url
         }
+        return try Servers.Server1.url()
+    }
+
+    public func configure(with config: Config) throws {
+        let url = try baseURL(for: config)
         self.config = config
         client = Client(
             serverURL: url,

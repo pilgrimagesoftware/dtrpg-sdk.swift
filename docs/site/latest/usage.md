@@ -63,3 +63,19 @@ do {
     // Other SDK or transport errors.
 }
 ```
+
+## Refreshing a session
+
+An access token is short-lived. To renew it without repeating the application-key exchange,
+call `refreshSession()`. It sends the session's refresh token to the API and replaces the
+stored session with the response, including the new refresh token and expiry.
+
+```swift
+do {
+    try await sdk.refreshSession()
+} catch SDKError.authSession {
+    // The refresh token was rejected; fall back to authenticate() with the
+    // application key. The existing session is left in place.
+    try await sdk.authenticate()
+}
+```
