@@ -2,7 +2,7 @@ name: Publish documentation
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, master]
     paths:
       - docs/site/**
       - .github/workflows/docs-pages.yaml
