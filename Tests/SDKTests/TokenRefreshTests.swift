@@ -18,10 +18,11 @@ private func sdkWithSession(
     body: Data,
     recorder: RequestRecorder = RequestRecorder()
 ) -> SDK {
-    let sdk = SDK(
-        client: AuthClientStub(output: .successOutput()),
-        config: Config(apiKey: "app-key", url: "https://example.test/api", apiVersion: "vTest"),
-        session: AuthSession(
+    // `refreshSession` needs a configuration and a session but no generated
+    // client, so none is set up here.
+    let sdk = SDK(config: Config(apiKey: "app-key", url: "https://example.test/api", apiVersion: "vTest"))
+    _ = sdk.applyAuthResponse(
+        AuthTokenResponse(
             token: "old-jwt",
             refreshToken: "old-refresh",
             refreshTokenExpiresAt: Date(timeIntervalSince1970: 1_000_000_000)
