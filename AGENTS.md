@@ -65,9 +65,14 @@ swift package clean
 
 ### Documentation
 
-Hosted automatically by the [Swift Package Index](https://swiftpackageindex.com/pilgrimagesoftware/dtrpg-sdk.swift)
-once indexed (the same role `docs.rs` plays for the Rust SDK) — no repo-side generation or publishing step is
-needed.
+Symbol-level API reference is hosted automatically by the
+[Swift Package Index](https://swiftpackageindex.com/pilgrimagesoftware/dtrpg-sdk.swift) once indexed (the same
+role `docs.rs` plays for the Rust SDK) — no repo-side generation step is needed for that reference.
+
+Installation, quick start, and usage examples live in `docs/site` (Jekyll), published to GitHub Pages by
+`.github/workflows/docs-pages.yaml` on pushes to `develop` that touch `docs/site`. See `docs/site/AGENTS.md` for
+authoring rules and `docs/site/PUBLISHING.md` for the one-time repository Pages setting and pre-merge validation
+steps. Validate locally with `bundle install && bundle exec jekyll build` from `docs/site`.
 
 ### Update API Submodule
 Since the OpenAPI spec is in a git submodule:

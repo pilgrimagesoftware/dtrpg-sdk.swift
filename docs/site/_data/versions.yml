@@ -1,0 +1,13 @@
+latest: latest
+versions:
+  - id: latest
+    label: Latest
+    path: /latest/
+    pages:
+      - index
+      - usage
+    nav:
+      - title: Overview
+        path: ""
+      - title: Usage examples
+        path: usage/

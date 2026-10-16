@@ -48,7 +48,9 @@ let session = try await sdk.authenticate()
 let library = try await sdk.listOrderProducts(LibraryItemsParams(library: true))
 ```
 
-See the [Swift Package Index documentation](https://swiftpackageindex.com/pilgrimagesoftware/dtrpg-sdk.swift/documentation)
+See the [documentation site](https://pilgrimagesoftware.github.io/dtrpg-sdk.swift/) for usage
+examples covering library operations and collection management, and the
+[Swift Package Index documentation](https://swiftpackageindex.com/pilgrimagesoftware/dtrpg-sdk.swift/documentation)
 for the full API reference, including `Config`, `AuthSession`/`AuthState`, and the library operations
 (`listOrderProducts`, `getOrderProduct`, `prepareDownload`, `listProductLists`, `createProductList`, and more).
 
